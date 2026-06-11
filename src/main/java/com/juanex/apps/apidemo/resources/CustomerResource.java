@@ -1,12 +1,27 @@
 package com.juanex.apps.apidemo.resources;
 
+import com.juanex.apps.apidemo.service.CustomerService;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
 @Path("/api/customers")
 public class CustomerResource {
+
+    @Inject
+    CustomerService customerService;
+
     @GET
-    public Response hello(){
-        return Response.ok("Hello World").build();
+    public Response findAll() {
+
+        var customers = customerService.findAll();
+
+        if(customers.isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        return Response
+                .ok(customers)
+                .build();
     }
 }
