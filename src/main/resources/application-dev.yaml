@@ -1,0 +1,17 @@
+quarkus:
+  http:
+    port: 8686
+  datasource:
+    db-kind: postgresql
+    username: ${app.config.db.username}
+    password: ${app.config.db.password}
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/customer_db
+
+  hibernate-orm:
+    database:
+      generation: update
+
+    log:
+      sql: true
+      format-sql: true
