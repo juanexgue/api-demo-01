@@ -1,5 +1,6 @@
 package com.juanex.apps.apidemo.resources;
 
+import com.juanex.apps.apidemo.dto.CustomerRequest;
 import com.juanex.apps.apidemo.service.CustomerService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -22,6 +23,16 @@ public class CustomerResource {
 
         return Response
                 .ok(customers)
+                .build();
+    }
+
+    @POST
+    public Response create(CustomerRequest customerRequest) {
+
+        var customerResponse = customerService.create(customerRequest);
+
+        return Response
+                .ok(customerResponse)
                 .build();
     }
 }

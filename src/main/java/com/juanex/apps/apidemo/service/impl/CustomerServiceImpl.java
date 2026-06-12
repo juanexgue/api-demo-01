@@ -1,15 +1,16 @@
 package com.juanex.apps.apidemo.service.impl;
 
+import com.juanex.apps.apidemo.dto.CustomerRequest;
 import com.juanex.apps.apidemo.dto.CustomerResponse;
 import com.juanex.apps.apidemo.entity.CustomerEntity;
 import com.juanex.apps.apidemo.repository.CustomerRepository;
 import com.juanex.apps.apidemo.service.CustomerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.util.Arrays.stream;
 
 @ApplicationScoped
 public class CustomerServiceImpl implements CustomerService {
@@ -30,12 +31,30 @@ public class CustomerServiceImpl implements CustomerService {
 
     }
 
+    @Override
+    @Transactional
+    public CustomerResponse create(CustomerRequest customerRequest) {
+        var entity = this.toEntity(customerRequest);
+        customerRepository.persist(entity);
+        return this.toResponse(entity);
+    }
+
     CustomerResponse toResponse(CustomerEntity customerEntity) {
         return new CustomerResponse(
                 customerEntity.getId(),
                 customerEntity.getFirstName(),
                 customerEntity.getLastName(),
                 customerEntity.getBirthOfDate()
+        );
+    }
+
+    CustomerEntity toEntity(CustomerRequest customerRequest) {
+        return new CustomerEntity(
+                null,
+                customerRequest.firstName(),
+                customerRequest.lastName(),
+                customerRequest.birthOfDate(),
+                LocalDateTime.now()
         );
     }
 }
